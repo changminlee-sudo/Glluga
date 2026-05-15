@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>포장팀 1인완결형 체제 전환 효과 보고서</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #647282;
+      --line: #d9e1e8;
+      --paper: #f6f8fb;
+      --panel: #ffffff;
+      --blue: #1e5aa8;
+      --teal: #0f8b8d;
+      --green: #15803d;
+      --amber: #a16207;
+      --red: #b42318;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "Segoe UI", "Malgun Gothic", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    header {
+      color: #fff;
+      background:
+        linear-gradient(120deg, rgba(13, 45, 79, .96), rgba(15, 122, 124, .9)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='520' viewBox='0 0 1400 520'%3E%3Crect width='1400' height='520' fill='%23283d4f'/%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.16' stroke-width='12'%3E%3Cpath d='M0 350h1400M0 410h1400M130 0v520M310 0v520M490 0v520M670 0v520M850 0v520M1030 0v520M1210 0v520'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.2'%3E%3Crect x='92' y='286' width='88' height='52' rx='4'/%3E%3Crect x='278' y='346' width='88' height='52' rx='4'/%3E%3Crect x='462' y='286' width='88' height='52' rx='4'/%3E%3Crect x='646' y='346' width='88' height='52' rx='4'/%3E%3Crect x='830' y='286' width='88' height='52' rx='4'/%3E%3Crect x='1014' y='346' width='88' height='52' rx='4'/%3E%3Crect x='1198' y='286' width='88' height='52' rx='4'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+      padding: 34px 32px 42px;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      color: rgba(255,255,255,.84);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 860px;
+      font-size: clamp(30px, 4.6vw, 54px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 800;
+    }
+
+    .lead {
+      max-width: 920px;
+      margin: 18px 0 0;
+      font-size: 18px;
+      color: rgba(255,255,255,.9);
+    }
+
+    main { padding: 28px 0 56px; }
+
+    section {
+      margin-top: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(23, 33, 43, .05);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 22px 0 10px;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfdff;
+      min-height: 122px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .metric .value {
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .metric .sub {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .good { color: var(--green); }
+    .warn { color: var(--amber); }
+    .blue { color: var(--blue); }
+    .teal { color: var(--teal); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 9px;
+      text-align: right;
+      vertical-align: middle;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    th:first-child, td:first-child,
+    th:nth-child(2), td:nth-child(2) { text-align: left; }
+
+    th {
+      color: #344252;
+      background: #f0f4f8;
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .summary-row td {
+      background: #f7fbf9;
+      font-weight: 700;
+    }
+
+    .bars {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 90px;
+      gap: 12px;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .track {
+      height: 14px;
+      background: #e8edf2;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+    }
+
+    .callout {
+      border-left: 4px solid var(--teal);
+      background: #eefafa;
+      padding: 14px 16px;
+      border-radius: 6px;
+      color: #193c3d;
+    }
+
+    .draft {
+      border: 1px dashed #9eb1c3;
+      border-radius: 8px;
+      padding: 16px;
+      background: #fcfcff;
+    }
+
+    .draft [contenteditable="true"] {
+      outline: none;
+      border-radius: 6px;
+      padding: 4px 6px;
+    }
+
+    .draft [contenteditable="true"]:focus {
+      background: #fff7d6;
+      box-shadow: inset 0 0 0 1px #d6a800;
+    }
+
+    .policy-list {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    .policy-list li { margin: 8px 0; }
+
+    .incentive-cards {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 16px;
+    }
+
+    .incentive-card {
+      display: grid;
+      grid-template-columns: 108px 1fr 112px;
+      gap: 10px;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .incentive-card .kind,
+    .incentive-card .amount {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 10px;
+      text-align: center;
+      font-weight: 800;
+      word-break: keep-all;
+    }
+
+    .incentive-card .kind {
+      color: #213142;
+      background: #eef4fa;
+    }
+
+    .incentive-card .condition {
+      padding: 12px 12px;
+      min-width: 0;
+    }
+
+    .incentive-card .condition strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .incentive-card .condition span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .incentive-card .amount {
+      color: #0f5132;
+      background: #e7f6ec;
+      font-size: 17px;
+    }
+
+    .incentive-card.extra .kind { background: #fff4d8; color: #6b4e00; }
+    .incentive-card.extra .amount { background: #fff9e8; color: #8a5a00; font-size: 14px; }
+    .incentive-card.support .kind { background: #edf2ff; color: #24478f; }
+    .incentive-card.support .amount { background: #f4f7ff; color: #24478f; font-size: 14px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      color: #1e4f93;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .flow-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      background: #fbfdff;
+      min-height: 110px;
+    }
+
+    .flow-step strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #203247;
+    }
+
+    .flow-step span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .done { color: #0f5132; background: #dff5e8; }
+    .doing { color: #6b4e00; background: #fff1bf; }
+    .review { color: #753a00; background: #ffe4c2; }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    button {
+      appearance: none;
+      border: 1px solid #2c5b8e;
+      border-radius: 6px;
+      color: #fff;
+      background: #245a96;
+      padding: 9px 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    button.secondary {
+      color: #23435f;
+      background: #fff;
+      border-color: #b6c5d4;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 16px;
+      text-align: right;
+    }
+
+    @media (max-width: 920px) {
+      .grid, .two-col { grid-template-columns: 1fr 1fr; }
+      .flow { grid-template-columns: 1fr 1fr; }
+      .bar-row { grid-template-columns: 120px 1fr 72px; }
+      section { padding: 18px; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 1180px); }
+      header { padding: 26px 18px 34px; }
+      .topline, .section-head { display: block; }
+      .grid, .two-col { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; }
+      .incentive-card { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 6px; }
+      .bar-row { grid-template-columns: 1fr; gap: 5px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      header { padding: 24px 0 26px; }
+      .wrap { width: 100%; padding: 0 18px; }
+      section { box-shadow: none; break-inside: avoid; }
+      button { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topline">
+        <div>포장팀 체제 전환 효과 보고</div>
+        <div>작성 기준: 2026년 5월 14일 데이터</div>
+      </div>
+      <h1>레일 연결형에서 1인완결형으로 전환한 생산성 및 노무비 절감 효과</h1>
+      <p class="lead">4월까지 운영한 레일 연결형 포장 방식과 5월부터 적용한 1인완결형 포장 방식을 비교하여 생산성, 병목 해소, 개당 포장 노무비, 예상 월 절감액 및 인센티브 지급 초안을 정리했습니다.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>핵심 결론</h2>
+          <div class="note">원본: [GP] 1인 포장 체재 데이터 _보고서용.xlsx</div>
+        </div>
+        <span class="tag">4월 대비 5월 현재</span>
+      </div>
+      <div class="grid">
+        <div class="metric">
+          <div class="label">UPH 평균</div>
+          <div class="value good">+52.2%</div>
+          <div class="sub">16.21 → 24.68</div>
+        </div>
+        <div class="metric">
+          <div class="label">개당 포장 노무비</div>
+          <div class="value good">-479.7원</div>
+          <div class="sub">1,398.3원 → 918.6원</div>
+        </div>
+        <div class="metric">
+          <div class="label">현재 실적 기준 절감액</div>
+          <div class="value blue">33,648,409원</div>
+          <div class="sub">5월 6일~14일 생산 70,139개 기준</div>
+        </div>
+        <div class="metric">
+          <div class="label">월 예상 절감액</div>
+          <div class="value teal">88,327,074원</div>
+          <div class="sub">현재 일평균 × 21일 기준</div>
+        </div>
+      </div>
+      <p class="callout">1인완결형 전환 후 앞 공정이 밀리면 뒤 공정이 멈추는 레일형 병목 구조가 완화되었고, 개인별 완결 생산량이 직접 확인되면서 작업 속도 편차 관리와 인센티브 설계가 가능해졌습니다.</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>4월 vs 5월 운영 데이터 비교</h2>
+          <div class="note">5월은 2026년 5월 14일까지 입력된 실적 기준입니다.</div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>운영 방식</th>
+            <th>생산 합계</th>
+            <th>평균 인원</th>
+            <th>근무시간</th>
+            <th>UPH 평균</th>
+            <th>계산 노무비</th>
+            <th>개당 노무비</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>4월</td>
+            <td>레일 연결형</td>
+            <td>186,542개</td>
+            <td>46.88명</td>
+            <td>245.5시간</td>
+            <td>16.21</td>
+            <td>260,843,750원</td>
+            <td>1,398.31원</td>
+          </tr>
+          <tr>
+            <td>5월 현재</td>
+            <td>1인완결형</td>
+            <td>70,139개</td>
+            <td>44.41명</td>
+            <td>64.0시간</td>
+            <td>24.68</td>
+            <td>64,427,733원</td>
+            <td>918.57원</td>
+          </tr>
+          <tr class="summary-row">
+            <td>효과</td>
+            <td>방식 전환 효과</td>
+            <td>-</td>
+            <td>-2.46명</td>
+            <td>-</td>
+            <td>+8.47</td>
+            <td>-</td>
+            <td>-479.74원</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="bars">
+        <div class="bar-row">
+          <div>4월 UPH</div>
+          <div class="track"><div class="fill" style="width: 65.7%"></div></div>
+          <div>16.21</div>
+        </div>
+        <div class="bar-row">
+          <div>5월 UPH</div>
+          <div class="track"><div class="fill" style="width: 100%"></div></div>
+          <div>24.68</div>
+        </div>
+        <div class="bar-row">
+          <div>4월 개당 노무비</div>
+          <div class="track"><div class="fill" style="width: 100%; background: linear-gradient(90deg, #a16207, #b42318)"></div></div>
+          <div>1,398원</div>
+        </div>
+        <div class="bar-row">
+          <div>5월 개당 노무비</div>
+          <div class="track"><div class="fill" style="width: 65.7%; background: linear-gradient(90deg, #15803d, #0f8b8d)"></div></div>
+          <div>919원</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>노무비 절감액 산출</h2>
+          <div class="note">계산식: 4월 개당 노무비 - 5월 개당 노무비 = 479.7389원/개</div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>계산</th>
+                <th>금액</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>현재 절감액</td>
+                <td>70,139개 × 479.7389원</td>
+                <td>33,648,409원</td>
+              </tr>
+              <tr>
+                <td>5월 월 예상 절감액</td>
+                <td>184,115개 × 479.7389원</td>
+                <td>88,327,074원</td>
+              </tr>
+              <tr>
+                <td>4월 동일 생산량 기준</td>
+                <td>186,542개 × 479.7389원</td>
+                <td>89,491,461원</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <strong>월 예상 기준</strong><br>
+          5월 현재 생산일 8일의 일평균 생산량은 8,767개입니다. 이를 21일 운영 기준으로 환산하면 예상 월 생산량은 184,115개이며, 4월 대비 예상 월 노무비 절감액은 약 8,833만원입니다. 4월과 동일 생산량 기준으로 보면 약 8,949만원 절감 효과입니다.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>평균 이상자 인센티브 지급 초안</h2>
+          <div class="note">기준 평균: 5월 1인완결형 개인 실적 평균 39.2206 UPH. 아래 초안 문구는 화면에서 직접 수정할 수 있습니다.</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>평균 이상 대상자</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>순위</th>
+                <th>조</th>
+                <th>성명</th>
+                <th>실적일</th>
+                <th>평균</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>1조</td><td>이시후</td><td>8일</td><td>47.00</td></tr>
+              <tr><td>2</td><td>임시</td><td>지영란(조장)</td><td>3일</td><td>47.00</td></tr>
+              <tr><td>3</td><td>7조</td><td>유정임</td><td>8일</td><td>46.75</td></tr>
+              <tr><td>4</td><td>5조</td><td>박지연</td><td>8일</td><td>46.12</td></tr>
+              <tr><td>5</td><td>1조</td><td>이미용</td><td>8일</td><td>45.38</td></tr>
+              <tr><td>6</td><td>4조</td><td>이경화</td><td>8일</td><td>44.88</td></tr>
+              <tr><td>7</td><td>4조</td><td>김민경</td><td>7일</td><td>44.57</td></tr>
+              <tr><td>8</td><td>임시</td><td>김소연(조장)</td><td>1일</td><td>44.00</td></tr>
+              <tr><td>9</td><td>4조</td><td>강지애</td><td>7일</td><td>43.86</td></tr>
+              <tr><td>10</td><td>6조</td><td>정재경</td><td>8일</td><td>42.88</td></tr>
+              <tr><td>11</td><td>7조</td><td>고은선</td><td>8일</td><td>42.05</td></tr>
+              <tr><td>12</td><td>4조</td><td>황면순</td><td>8일</td><td>41.50</td></tr>
+              <tr><td>13</td><td>3조</td><td>윤명화</td><td>8일</td><td>41.38</td></tr>
+              <tr><td>14</td><td>4조</td><td>박미주</td><td>8일</td><td>40.88</td></tr>
+              <tr><td>15</td><td>5조</td><td>최미경</td><td>8일</td><td>40.00</td></tr>
+              <tr><td>16</td><td>2조</td><td>강태연</td><td>8일</td><td>39.62</td></tr>
+              <tr><td>17</td><td>7조</td><td>김영경</td><td>8일</td><td>39.62</td></tr>
+              <tr><td>18</td><td>1조</td><td>이금자</td><td>8일</td><td>39.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3>인센티브 지급 조건 초안</h3>
+          <div class="draft">
+            <div class="incentive-cards">
+              <div class="incentive-card">
+                <div class="kind" contenteditable="true">팁 작업</div>
+                <div class="condition" contenteditable="true">
+                  <strong>당월 평균 UPH 이상 달성자</strong>
+                  <span>월 평균 기준 이상 달성 시 기본 지급</span>
+                </div>
+                <div class="amount" contenteditable="true">50,000원</div>
+              </div>
+              <div class="incentive-card">
+                <div class="kind" contenteditable="true">팁 작업</div>
+                <div class="condition" contenteditable="true">
+                  <strong>당월 UPH 상위 20% 이내 해당자</strong>
+                  <span>평균 이상자 중 고성과자 차등 지급</span>
+                </div>
+                <div class="amount" contenteditable="true">100,000원</div>
+              </div>
+              <div class="incentive-card extra">
+                <div class="kind" contenteditable="true">추가 제안</div>
+                <div class="condition" contenteditable="true">
+                  <strong>월별 UPH 1등 3회 이상 달성 시 지급 인상</strong>
+                  <span>반복 고성과자에 대한 추가 보상 기준</span>
+                </div>
+                <div class="amount" contenteditable="true">지급 인상</div>
+              </div>
+              <div class="incentive-card support">
+                <div class="kind" contenteditable="true">인/아웃박스 & 밴딩</div>
+                <div class="condition" contenteditable="true">
+                  <strong>만근 기준</strong>
+                  <span>결근, 조퇴, 지각이 없는 경우 별도 산정액 지급</span>
+                </div>
+                <div class="amount" contenteditable="true">별도 산정액 지급</div>
+              </div>
+              <div class="incentive-card extra">
+                <div class="kind" contenteditable="true">추가 제안</div>
+                <div class="condition" contenteditable="true">
+                  <strong>전원 만근 시 추가 지급 검토</strong>
+                  <span>잔업 및 특근 참여도에 따라 지급 여부와 금액 결정</span>
+                </div>
+                <div class="amount" contenteditable="true">협의 후 결정</div>
+              </div>
+            </div>
+            <p contenteditable="true"><strong>목적:</strong> 1인완결형 포장 체제의 조기 정착과 병목 없는 생산 흐름 유지를 위해, 개인별 평균 생산성과 출근/참여 기준을 함께 반영한 인센티브를 지급한다.</p>
+            <ol class="policy-list">
+              <li contenteditable="true"><strong>UPH 산정 기준:</strong> 연차, 결근, 품질 지원, 박스/밴딩 지원 등 비포장 업무 표기는 평균 산정에서 제외하고 숫자 실적만 반영한다.</li>
+              <li contenteditable="true"><strong>중복 지급 기준:</strong> 평균 이상 지급과 상위 20% 지급은 최종 지급 방식이 중복 지급인지, 상위 금액만 지급인지 협의 후 확정한다.</li>
+              <li contenteditable="true"><strong>별도 산정 대상:</strong> 인/아웃박스 및 밴딩 업무는 포장 UPH와 성격이 다르므로 만근과 참여도를 기준으로 별도 산정한다.</li>
+              <li contenteditable="true"><strong>개정 포인트:</strong> 최소 실적일, 조장/지원 인력 포함 여부, 품질 불량 발생 시 감액 기준, 잔업/특근 반영률은 운영 회의에서 확정한다.</li>
+            </ol>
+          </div>
+          <div class="actions">
+            <button onclick="window.print()">인쇄 / PDF 저장</button>
+            <button class="secondary" onclick="resetDraft()">초안 원복</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>데시보드 연동 운영 및 테스트 리뷰</h2>
+          <div class="note">원본: [JH]실적 입력 어플 테스트 결과 리뷰_V1.xlsx. 1차~2차 테스트 리뷰와 현재 운영 구상을 반영했습니다.</div>
+        </div>
+        <span class="tag">QR 입력 → 타임별 실적 → 현황판</span>
+      </div>
+
+      <h3>운영 구상</h3>
+      <div class="flow">
+        <div class="flow-step">
+          <strong>1. 조장 접속</strong>
+          <span>그룹 조장이 공유 링크를 통해 실적 입력 화면에 접속합니다.</span>
+        </div>
+        <div class="flow-step">
+          <strong>2. 팀원 스캔</strong>
+          <span>작업 투입 인원을 개별 QR로 스캔해 작업자별 실적 기반을 만듭니다.</span>
+        </div>
+        <div class="flow-step">
+          <strong>3. 작업지시서 스캔</strong>
+          <span>제품/작업지시서 QR을 스캔해 품목과 작업 기준을 연결합니다.</span>
+        </div>
+        <div class="flow-step">
+          <strong>4. 타임별 수량 입력</strong>
+          <span>각 타임 종료 시 그룹별 작업수량을 입력하고 마감합니다.</span>
+        </div>
+        <div class="flow-step">
+          <strong>5. 대시보드 구현</strong>
+          <span>그룹별 실적, 일일 목표, 프로젝트 진척도를 현황판에 표시합니다.</span>
+        </div>
+      </div>
+
+      <h3>잘된 점</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>내용</th>
+            <th>보고 포인트</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>현장 입력 체계</td>
+            <td>조장이 팀원과 작업지시서를 스캔하고 타임별 수량을 입력하는 흐름을 구축함.</td>
+            <td>수기 집계 의존도를 낮추고 타임 단위 실적 확인 기반을 마련.</td>
+          </tr>
+          <tr>
+            <td>가시화</td>
+            <td>타임 종료 시 대시보드에 그룹별 현황이 구현되도록 연동 작업 진행.</td>
+            <td>일일 포장목표와 프로젝트 진척도를 현장에서 즉시 확인 가능.</td>
+          </tr>
+          <tr>
+            <td>경쟁 유도</td>
+            <td>그룹별 실적을 같은 화면에서 비교할 수 있어 선한 경쟁 구조 형성.</td>
+            <td>1인완결형 생산성 향상과 인센티브 제도의 근거 데이터로 활용 가능.</td>
+          </tr>
+          <tr>
+            <td>개선 속도</td>
+            <td>작업자 개별 수량 입력, 조장 QR 처리, 전체 투입 인원 표기 등 일부 이슈 조치완료.</td>
+            <td>운영 테스트를 통해 현장 요구사항을 빠르게 반영하는 구조 확인.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>테스트 중 확인된 문제점 및 조치 현황</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>영역</th>
+            <th>확인된 문제</th>
+            <th>조치/상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>대시보드 공유/최신화</td>
+            <td>현황판 공유가 되지 않거나 창을 다시 열어야 최신화되는 사례 발생.</td>
+            <td><span class="status doing">개선 필요</span></td>
+          </tr>
+          <tr>
+            <td>시트 연동</td>
+            <td>동일 입력에도 일부 조는 연동되고 4,5조 등 일부 조는 연동되지 않는 사례 발생.</td>
+            <td><span class="status doing">연동 안정화 필요</span></td>
+          </tr>
+          <tr>
+            <td>QR 인식</td>
+            <td>제품 QR 인식 오류, 조장 QR이 작업자로 인식되는 오류 발생.</td>
+            <td><span class="status done">일부 조치완료/업데이트중</span></td>
+          </tr>
+          <tr>
+            <td>품목 교체</td>
+            <td>작업 중간 품목 교체 시 QR 재입력 경로가 없거나 생산량 누적이 초기화되는 사례 발생.</td>
+            <td><span class="status doing">교체 프로세스 보완 필요</span></td>
+          </tr>
+          <tr>
+            <td>인원 변경</td>
+            <td>작업 중간 타부서 지원 등으로 인원이 감소할 때 UPH 계산 오류 가능.</td>
+            <td><span class="status review">기술/운영 기준 논의</span></td>
+          </tr>
+          <tr>
+            <td>수량 검증</td>
+            <td>생산수량과 실적 마감 시 합산 수량이 상이한 사례 확인.</td>
+            <td><span class="status doing">검증 로직 필요</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>개선 제안</h3>
+      <div class="two-col">
+        <div class="callout">
+          <strong>운영 기준 정리</strong><br>
+          품목 교체, 작업자 이동, 인원 추가/감소, 조장 제외, 지원 업무 투입 기준을 입력 규칙으로 문서화해야 합니다. 이 기준이 확정되어야 UPH와 인센티브 산정의 신뢰도가 올라갑니다.
+        </div>
+        <div class="callout">
+          <strong>시스템 보완 우선순위</strong><br>
+          1순위는 대시보드 실시간 최신화와 조별 연동 안정화, 2순위는 품목 교체 시 누적 유지, 3순위는 실적 수정 기능과 마감 수량 검증입니다.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>운영상 해석 및 제안</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>관찰 항목</th>
+            <th>해석</th>
+            <th>관리 제안</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>병목 현상</td>
+            <td>레일 연결형은 앞 공정 지연 시 뒤 공정 대기가 발생했으나, 1인완결형은 개인 단위로 흐름이 분리됨.</td>
+            <td>일별 개인 실적과 지원 투입 이력을 함께 기록해 병목 원인을 분리 관리.</td>
+          </tr>
+          <tr>
+            <td>생산성</td>
+            <td>UPH 평균이 16.21에서 24.68로 상승해 동일 인원 대비 산출 효율이 개선됨.</td>
+            <td>상위 작업자의 포장 동작, 준비 방식, 자재 배치 기준을 표준 작업으로 정리.</td>
+          </tr>
+          <tr>
+            <td>노무비</td>
+            <td>개당 포장 노무비가 34.3% 낮아져 생산량 증가분이 직접 비용 절감으로 연결됨.</td>
+            <td>월 마감 시 실 청구액 기준과 계산 노무비 기준을 병행 검증.</td>
+          </tr>
+          <tr>
+            <td>인센티브</td>
+            <td>평균 이상자 보상은 신규 체제 적응 속도를 높이는 장치가 될 수 있음.</td>
+            <td>품질, 결근, 지원 업무, 최소 실적일 기준을 함께 넣어 형평성 확보.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      본 보고서는 제공된 엑셀 파일의 입력값을 기준으로 작성되었으며, 5월 월 예상치는 현재 추세 기반 추정입니다.
+    </footer>
+  </main>
+
+  <script>
+    const originalDraft = [];
+    document.querySelectorAll('.draft [contenteditable="true"]').forEach((node) => {
+      originalDraft.push(node.innerHTML);
+    });
+
+    function resetDraft() {
+      document.querySelectorAll('.draft [contenteditable="true"]').forEach((node, index) => {
+        node.innerHTML = originalDraft[index];
+      });
+    }
+  </script>
+</body>
+</html>
