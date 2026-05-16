@@ -2246,6 +2246,500 @@
     .modal-grid-2 { grid-template-columns: 1fr; }
   }
 
+  /* ════════════════════════════════════════════════════
+     PRESENTATION MODE
+     ════════════════════════════════════════════════════ */
+
+  /* 발표모드 진입 버튼 (우측 하단 고정) */
+  .pres-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 95;
+    background: var(--ink);
+    color: var(--gold-soft);
+    border: 1px solid var(--gold);
+    padding: 10px 18px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pres-toggle:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(184,146,61,0.3);
+  }
+  .pres-toggle .pt-icon {
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  /* 발표 모드 활성화 시 */
+  body.presentation-mode .pres-toggle {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  body.presentation-mode .pres-toggle:hover { background: var(--ink); }
+  body.presentation-mode .side-nav { display: none; }
+  body.presentation-mode .scroll-progress { height: 3px; }
+
+  /* 발표 모드용 미니 인디케이터 (우측 하단, 토글 버튼 위) */
+  .pres-indicator {
+    position: fixed;
+    bottom: 70px;
+    right: 24px;
+    z-index: 95;
+    background: rgba(15,23,41,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--gold-soft);
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    text-align: center;
+    min-width: 140px;
+  }
+  body.presentation-mode .pres-indicator {
+    opacity: 1;
+  }
+  .pres-indicator .pi-section {
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+    letter-spacing: 0.2em;
+  }
+  .pres-indicator .pi-position {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--gold-soft);
+    line-height: 1;
+  }
+  .pres-indicator .pi-position .pip-current {
+    font-weight: 700;
+    color: white;
+    font-size: 22px;
+  }
+  .pres-indicator .pi-hint {
+    margin-top: 6px;
+    font-size: 8.5px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.15em;
+  }
+
+  /* 발표 모드에서 카드 호버 강조 */
+  body.presentation-mode .pillar-card,
+  body.presentation-mode .outcome-card,
+  body.presentation-mode .num-card,
+  body.presentation-mode .activity-card,
+  body.presentation-mode .impact-banner {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, outline 0.2s ease;
+  }
+  body.presentation-mode .pillar-card:hover,
+  body.presentation-mode .outcome-card:hover,
+  body.presentation-mode .num-card:hover,
+  body.presentation-mode .activity-card:hover {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+  }
+  body.presentation-mode .impact-banner:hover {
+    outline: 2px solid var(--gold-soft);
+    outline-offset: 6px;
+  }
+
+  /* 단축키 도움말 오버레이 */
+  .pres-help-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,41,0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .pres-help-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .pres-help-panel {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 48px 56px;
+    max-width: 620px;
+    width: calc(100% - 40px);
+    border-top: 4px solid var(--gold);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .pres-help-panel h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .pres-help-panel .ph-sub {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pres-help-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 20px;
+    align-items: center;
+  }
+  .ph-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .ph-key kbd {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--ink);
+    color: var(--gold-soft);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 3px;
+    box-shadow: 0 2px 0 var(--ink-2);
+    line-height: 1;
+    min-width: 26px;
+    text-align: center;
+  }
+  .ph-key span { color: var(--muted); font-size: 12px; }
+  .ph-desc {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+  .pres-help-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .pres-toggle {
+      bottom: 16px; right: 16px;
+      padding: 8px 14px;
+      font-size: 10px;
+    }
+    .pres-indicator { display: none; }
+    .pres-help-panel { padding: 28px 24px; }
+    .pres-help-grid { gap: 8px 12px; }
+  }
+
+  /* ════════════════════════════════════════════════════
+     PART VISION SECTION (Pillar 3.5)
+     ════════════════════════════════════════════════════ */
+  .part-vision-block {
+    background: #FFF;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+  section.alt .part-vision-block { background: var(--paper); }
+
+  .pv-header {
+    background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+    color: var(--paper);
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 24px;
+    align-items: center;
+    position: relative;
+  }
+  .pv-header.info {
+    background: linear-gradient(135deg, var(--ink-2) 0%, #2D4068 100%);
+  }
+  .pv-header.logistics {
+    background: linear-gradient(135deg, #2A3D2E 0%, #4A6741 100%);
+  }
+  .pv-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold-soft);
+    font-weight: 700;
+    padding: 4px 10px;
+    border: 1px solid var(--gold-soft);
+    border-radius: 2px;
+  }
+  .pv-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.01em;
+  }
+  .pv-tag {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    text-align: right;
+    line-height: 1.5;
+    padding-left: 24px;
+    border-left: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* Timeline */
+  .pv-timeline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .pv-phase {
+    padding: 28px 32px;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .pv-phase:last-child { border-right: none; }
+  .pv-phase.active {
+    background: linear-gradient(180deg, rgba(184,146,61,0.04), transparent 60%);
+  }
+
+  .pv-phase-marker {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pv-phase-badge {
+    display: inline-block;
+    padding: 5px 11px;
+    background: var(--gold);
+    color: white;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 2px;
+  }
+  .pv-phase-badge.next {
+    background: var(--paper-2);
+    color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  section.alt .pv-phase-badge.next {
+    background: #FFF;
+  }
+  .pv-phase-date {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+
+  .pv-person {
+    margin-bottom: 12px;
+  }
+  .pv-person-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .pv-person-status {
+    font-size: 10.5px;
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .pv-role-title {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--gold-soft);
+    font-size: 13px;
+    font-weight: 600;
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+  }
+  .pv-phase:not(.active) .pv-role-title {
+    background: var(--paper-2);
+    color: var(--ink);
+    border-left-color: var(--muted);
+  }
+  section.alt .pv-phase:not(.active) .pv-role-title {
+    background: #FFF;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--muted);
+  }
+
+  .pv-roles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .pv-roles li {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    padding: 5px 0 5px 18px;
+    position: relative;
+  }
+  .pv-roles li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* Growth vision footer */
+  .pv-growth {
+    padding: 20px 32px;
+    background: var(--paper-2);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  section.alt .pv-growth { background: #FFF; }
+  .pv-growth-tag {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    padding-right: 24px;
+    border-right: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .pv-growth-text {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.7;
+  }
+  .pv-growth-text em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* Summary block */
+  .pv-summary {
+    margin-top: 12px;
+    padding: 32px;
+    background: var(--ink);
+    color: var(--paper);
+    border-left: 4px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .pv-summary::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -8%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(184,146,61,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .pv-summary > * { position: relative; z-index: 1; }
+  .pv-summary-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold-soft);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .pv-summary-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: white;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .pv-summary-text em {
+    color: var(--gold-soft);
+    font-style: italic;
+  }
+  .pv-summary-tracks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .pv-track {
+    text-align: left;
+  }
+  .pv-track-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--gold-soft);
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .pv-track-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pv-track-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 900px) {
+    .pv-header { grid-template-columns: 1fr; gap: 8px; }
+    .pv-tag { padding-left: 0; border-left: none; text-align: left; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.15); }
+    .pv-timeline { grid-template-columns: 1fr; }
+    .pv-phase { border-right: none; border-bottom: 1px solid var(--line); }
+    .pv-phase:last-child { border-bottom: none; }
+    .pv-growth { grid-template-columns: 1fr; gap: 12px; }
+    .pv-growth-tag { padding-right: 0; border-right: none; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+    .pv-summary-tracks { grid-template-columns: 1fr; gap: 20px; }
+  }
+
   @media (max-width: 1100px) {
     .org-chart-stage { height: 640px; }
   }
@@ -2297,6 +2791,7 @@
   <a class="nav-item" data-target="sec-pillar1"><span class="nav-num">P1</span><span class="nav-label">DX 시스템</span></a>
   <a class="nav-item" data-target="sec-pillar2"><span class="nav-num">P2</span><span class="nav-label">AI 확산</span></a>
   <a class="nav-item" data-target="sec-pillar3"><span class="nav-num">P3</span><span class="nav-label">조직 재편</span></a>
+  <a class="nav-item" data-target="sec-part-vision"><span class="nav-num">P3.5</span><span class="nav-label">파트 비전</span></a>
   <a class="nav-item" data-target="sec-pillar4"><span class="nav-num">P4</span><span class="nav-label">성과 체계</span></a>
   <a class="nav-item" data-target="sec-pillar5"><span class="nav-num">P5</span><span class="nav-label">권한 위임</span></a>
   <a class="nav-item" data-target="sec-outcomes"><span class="nav-num">06</span><span class="nav-label">다섯 축의 결과</span></a>
@@ -2312,6 +2807,55 @@
   <div class="modal" role="dialog" aria-modal="true">
     <button class="modal-close" id="modalClose" aria-label="닫기">×</button>
     <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- 발표 모드 토글 버튼 -->
+<button class="pres-toggle" id="presToggle" aria-label="발표 모드 전환">
+  <span class="pt-icon">▶</span>
+  <span class="pt-label">발표 모드</span>
+</button>
+
+<!-- 발표 모드 인디케이터 -->
+<div class="pres-indicator" id="presIndicator">
+  <div class="pi-section" id="piSection">SECTION</div>
+  <div class="pi-position"><span class="pip-current" id="pipCurrent">01</span> / <span id="pipTotal">15</span></div>
+  <div class="pi-hint">← → 이동 · H 도움말</div>
+</div>
+
+<!-- 도움말 오버레이 -->
+<div class="pres-help-overlay" id="presHelp" role="dialog" aria-modal="true">
+  <div class="pres-help-panel">
+    <div class="ph-sub">PRESENTATION MODE · 단축키</div>
+    <h3>키보드로 발표를 더 부드럽게</h3>
+    <div class="pres-help-grid" style="margin-top: 18px;">
+      <div class="ph-key"><kbd>←</kbd><kbd>→</kbd></div>
+      <div class="ph-desc">이전 / 다음 섹션으로 부드럽게 이동</div>
+
+      <div class="ph-key"><kbd>Space</kbd></div>
+      <div class="ph-desc">다음 섹션 (Shift+Space = 이전)</div>
+
+      <div class="ph-key"><kbd>0</kbd><span>~</span><kbd>9</kbd></div>
+      <div class="ph-desc">섹션 직접 점프 (0=표지, 1=요약, 2=단계, ...)</div>
+
+      <div class="ph-key"><kbd>Home</kbd><kbd>End</kbd></div>
+      <div class="ph-desc">처음 / 마지막 섹션으로</div>
+
+      <div class="ph-key"><kbd>F</kbd></div>
+      <div class="ph-desc">브라우저 전체 화면 전환</div>
+
+      <div class="ph-key"><kbd>P</kbd></div>
+      <div class="ph-desc">발표 모드 ON / OFF</div>
+
+      <div class="ph-key"><kbd>H</kbd><span>또는</span><kbd>?</kbd></div>
+      <div class="ph-desc">이 도움말 열기 / 닫기</div>
+
+      <div class="ph-key"><kbd>Esc</kbd></div>
+      <div class="ph-desc">팝업 닫기 · 발표 모드 종료</div>
+    </div>
+    <div class="pres-help-footer">
+      카드를 클릭하면 상세 내용이 팝업으로 열립니다 · 아무 곳이나 클릭하여 닫기
+    </div>
   </div>
 </div>
 
@@ -2691,9 +3235,9 @@
         <div class="oc-numbers">
           <span class="oc-asis-num">7</span>
           <span class="oc-arrow">→</span>
-          <span class="oc-tobe-num">5</span>
+          <span class="oc-tobe-num">6</span>
         </div>
-        <div class="oc-delta"><span id="orgDeltaText">−28% 부담 분산</span></div>
+        <div class="oc-delta"><span id="orgDeltaText">단위 정리 + 책임 구조 재정의</span></div>
       </div>
 
       <div class="org-toggle" role="tablist" aria-label="조직 구조 보기">
@@ -2753,10 +3297,12 @@
         <div class="on-badge moved">이관</div>
       </div>
 
-      <div class="org-node part moving" data-node="material" data-state-asis="mgmt" data-state-tobe="separated">
+      <!-- 자재파트 → 포장물류팀 산하 물류파트로 이관 (박정호 합류) -->
+      <div class="org-node part moving" data-node="material" data-state-asis="mgmt" data-state-tobe="logistics">
         <div class="on-tag">PART</div>
         <div class="on-name">자재파트</div>
-        <div class="on-badge separated">분리</div>
+        <div class="on-sub-tobe">→ 물류파트 (최원준 · 박정호)</div>
+        <div class="on-badge moved">이관</div>
       </div>
 
       <!-- 신설 노드 (TO-BE에서만 표시) -->
@@ -2772,37 +3318,46 @@
         <div class="on-badge new">+ 신규</div>
       </div>
 
-      <!-- 빨려나간 자재파트가 갈 별도 위치 (TO-BE) -->
-      <div class="org-side-bucket" id="orgSideBucket">
-        <div class="osb-label">분리 → 신설 위치</div>
-        <div class="osb-text">별도 파트 또는 포장물류팀</div>
+      <!-- 포장물류팀 신설 (디렉터 직속, 팀장 공석 - 조인규 대행 또는 신규 선임 검토) -->
+      <div class="org-node team new-node" data-node="logistics" data-state-asis="hidden" data-state-tobe="director">
+        <div class="on-tag">TEAM · 신설</div>
+        <div class="on-name">포장물류팀</div>
+        <div class="on-sub-tobe">팀장 공석 · 조인규 대행 검토</div>
+        <div class="on-badge new">+ 신규</div>
+      </div>
+
+      <!-- 포장파트 (포장물류팀 산하 신규, 조인규 + 김진혁·유채민) -->
+      <div class="org-node part new-node" data-node="packaging" data-state-asis="hidden" data-state-tobe="logistics">
+        <div class="on-tag">PART</div>
+        <div class="on-name">포장파트</div>
+        <div class="on-sub-tobe">조인규 (대행) · 김진혁 · 유채민</div>
+        <div class="on-badge new">+ 신규</div>
       </div>
     </div>
 
     <!-- 범례 + 가이드 -->
     <div class="org-legend-bar">
-      <span class="ol-item"><span class="ol-dot move"></span>이관 (총무파트)</span>
-      <span class="ol-item"><span class="ol-dot sep"></span>분리 (자재파트)</span>
-      <span class="ol-item"><span class="ol-dot new"></span>신규 (정보전략파트 · 음성공장 관리)</span>
+      <span class="ol-item"><span class="ol-dot move"></span>이관 (총무파트 · 자재파트)</span>
+      <span class="ol-item"><span class="ol-dot new"></span>신규 (포장물류팀 · 정보전략파트 · 음성공장 관리)</span>
       <span class="ol-hint">버튼으로 AS-IS / TO-BE 전환 또는 자동 재생</span>
     </div>
 
     <!-- 액션 카드 -->
-    <div class="pillar-body-grid" style="margin-top: 40px;">
-      <div class="pillar-card" data-detail='{"summary":"현재 공무파트 산하의 총무파트를 생산기획팀으로 이관합니다. 디렉터 업무 부하 분산의 첫 단계이자, 공무파트가 본연의 업무에 집중할 수 있는 기반입니다.","items":["이관 체크리스트로 업무 공백 방지","R&R 정립 매뉴얼 작성","분기별 점검으로 안착도 검증","이관 후 공무파트는 시설·설비 관리에 집중"],"note":"디렉터 직속 단위 7 → 6 (1단계)"}'>
+    <div class="pillar-body-grid" style="margin-top: 40px; grid-template-columns: repeat(4, 1fr);">
+      <div class="pillar-card" data-detail='{"summary":"현재 공무파트 산하의 총무파트를 생산기획팀으로 이관합니다. 디렉터 업무 부하 분산의 첫 단계이자, 공무파트가 본연의 업무에 집중할 수 있는 기반입니다.","items":["이관 체크리스트로 업무 공백 방지","R&R 정립 매뉴얼 작성","분기별 점검으로 안착도 검증","이관 후 공무파트는 시설·설비 관리에 집중"],"note":"디렉터 직속 단위 7 → 6"}'>
         <div class="card-tag">ACTION · 01</div>
         <h5>총무파트 이관 흡수</h5>
         <p>
-          현재 공무파트 산하의 총무파트를 생산기획팀으로 이관. 디렉터 업무 부하 분산의 첫 단계이자,
+          공무파트 산하의 총무파트를 생산기획팀으로 이관. 디렉터 업무 부하 분산의 첫 단계이자,
           공무파트가 본연의 업무에 집중할 수 있는 기반.
         </p>
       </div>
-      <div class="pillar-card" data-detail='{"summary":"생산관리팀이 데이터 관리에 집중할 수 있도록 자재파트를 분리. 별도 파트 또는 포장물류팀 형태로 운영합니다.","items":["자재 입출고 관리 vs 데이터 관리의 R&R 명확화","포장물류팀 신설 또는 기존 파트 흡수 검토","분리 후 생산관리팀은 KPI 자동 집계·분석에 집중","자재파트 운영 모델은 6개월 시범 후 확정"],"note":"디렉터 직속에는 변화 없으나 생산관리팀 부담 경감"}'>
+      <div class="pillar-card" data-detail='{"summary":"생산1·2팀 외에 포장물류팀을 신설하여 3개 팀 체제로 전환. 박정호 프로 면담 결과 본인 보직 이동 의사와 자재 경력 확인을 바탕으로, 포장파트(조인규·김진혁·유채민)와 물류파트(최원준·박정호) 2개 파트로 운영합니다.","sections":[{"title":"신설 구조","items":["포장물류팀 (디렉터 직속, 팀장 공석)","├ 포장파트 (3명): 조인규 파트장(팀장 대행 검토) + 김진혁 책임 + 유채민 프로","└ 물류파트 (2명): 최원준 프로 + 박정호 프로 (기존 자재파트 이관 + 보직이동)"]},{"title":"박정호 프로 면담 결과","items":["입사 시 포장공정 지원, 젤프레스온 개발로 생산2팀 배정 후 성형/파츠 거침","현 업무에 답답함을 느껴 면담 진행","면담 결과 본인 보직 이동 의사 확인","자재 경력 1.5년 보유 확인 → 물류파트로 이동 결정 (포장이 아닌 자재 경력 살리는 방향)"]},{"title":"팀장 운영 방안","items":["팀장 공석으로 출발 → 두 가지 선택지 검토","Option A: 조인규 파트장의 팀장 대행 — 역량 검증 + 승진 경로","Option B: 신규 팀장 외부 채용 또는 내부 승진 — 안정적 운영 우선","6개월 시범 운영 후 결정"]},{"title":"해결되는 이슈","items":["박정호 프로: 면담 의사 반영 + 자재 경력 활용처 마련","조인규 파트장: 팀장 대행 경험으로 본격적 리딩 역량 강화 (포장파트 3명 통솔)","자재팀: 1인 운영 공백·부하 해소 (최원준 + 박정호 2인 체제)","생산관리팀: 자재 분리로 데이터 관리에 집중"]}],"note":"6개월 시범 운영 후 팀장 충원 또는 운영 모델 확정"}'>
         <div class="card-tag">ACTION · 02</div>
-        <h5>자재파트 분리</h5>
+        <h5>포장물류팀 신설</h5>
         <p>
-          생산관리팀이 데이터 관리에 집중할 수 있도록 자재파트를 분리.
-          별도 파트 또는 포장물류팀 형태로 운영하도록 설계.
+          생산1·2팀 외에 포장물류팀을 신설하여 3개 팀 체제로 전환.
+          포장파트(조인규·김진혁·유채민)와 물류파트(최원준·박정호)로 운영. 박정호 면담 결과 자재 경력 활용 방향으로 결정.
         </p>
       </div>
       <div class="pillar-card" data-detail='{"summary":"별도 관리체계가 없는 음성공장 — 출퇴근 경유 동선을 활용해 생산기획팀 차원의 관리를 일부 병행합니다.","items":["출퇴근 경유 동선 활용 (이창민 팀장)","주 1~2회 현장 방문 + 분기 정기 점검","생산기획팀 산하 신규 관리 단위 형태","점진적 체계화 후 정식 관리 구조 정립"],"note":"기존 사각지대 해소"}'>
@@ -2813,16 +3368,38 @@
           생산기획팀 차원의 관리를 일부 병행. 점진적 체계화 추진.
         </p>
       </div>
+      <div class="pillar-card" data-detail='{"summary":"신설되는 정보전략파트의 채용 결재가 진행 중입니다. DX 시스템 운영·확장 + 사내 전산·네트워크·보안 기반 마련을 담당합니다. 자세한 비전과 인력 계획은 03.5 섹션 참조.","items":["1인 채용 (결재 대기·면접 단계)","DX 전략 개발 + 총무팀 협업 사내 전산","연말~내년 1월 신규 채용 +1명 (정부지원사업·스마트팩토리)","생산기획팀 산하"],"note":"DX 시스템·AI 확산의 기술적 실행 엔진"}'>
+        <div class="card-tag">ACTION · 04</div>
+        <h5>정보전략파트 신설</h5>
+        <p>
+          DX 시스템 운영·확장과 정부지원사업·스마트팩토리 고도화를 담당할 신규 파트.
+          단계적으로 2명까지 충원 예정. 자세한 비전은 03.5 참조.
+        </p>
+      </div>
+    </div>
+        <p>
+          생산관리팀이 데이터 관리에 집중할 수 있도록 자재파트를 분리.
+          별도 파트 또는 포장물류팀 형태로 운영하도록 설계.
+        </p>
+      </div>
+      <div class="pillar-card" data-detail='{"summary":"신설되는 정보전략파트의 채용 결재가 진행 중입니다. DX 시스템 운영·확장 + 사내 전산·네트워크·보안 기반 마련을 담당합니다. 자세한 비전과 인력 계획은 03.5 섹션 참조.","items":["1인 채용 (결재 대기·면접 단계)","DX 전략 개발 + 총무팀 협업 사내 전산","연말~내년 1월 신규 채용 +1명 (정부지원사업·스마트팩토리)","생산기획팀 산하"],"note":"DX 시스템·AI 확산의 기술적 실행 엔진"}'>
+        <div class="card-tag">ACTION · 04</div>
+        <h5>정보전략파트 신설</h5>
+        <p>
+          DX 시스템 운영·확장과 정부지원사업·스마트팩토리 고도화를 담당할 신규 파트.
+          단계적으로 2명까지 충원 예정. 자세한 비전은 03.5 참조.
+        </p>
+      </div>
     </div>
 
     <!-- 조직 재편의 기대 효과 -->
     <div class="impact-banner" data-detail='{
       "summary": "조직 재편의 본질은 단순한 단위 축소가 아닙니다. 디렉터의 의사결정 부담을 줄이는 동시에, 생산기획팀이 총무파트를 통해 전 직원 역량 강화 프로젝트를 주도할 수 있는 구조를 만드는 것입니다.",
       "kpis": [
-        { "num": "↓", "label": "디렉터 결재 부담", "text": "직속 단위 7 → 5로 감소. 의사결정 대기 시간 단축, 핵심 사안에 집중 가능." },
+        { "num": "↓", "label": "디렉터 결재 부담", "text": "직속 단위 7 → 6 정리 + 책임 분산. 의사결정 대기 시간 단축, 핵심 사안에 집중 가능." },
         { "num": "↑", "label": "의사결정 속도", "text": "생산기획팀이 일상적 의사결정을 일부 위임 받아 처리. 디렉터 부재 시에도 업무가 멈추지 않는 구조." },
-        { "num": "↑", "label": "직원 역량 강화", "text": "총무파트 흡수 후 생산기획팀 주도로 직원 역량 강화 프로젝트 추진. 교육·평가·문화 영역의 통합 관리." },
-        { "num": "↑", "label": "사각지대 해소", "text": "음성공장 관리 병행으로 기존 관리되지 않던 영역까지 시야 확보." }
+        { "num": "↑", "label": "직원 역량 강화", "text": "총무파트 흡수 후 생산기획팀 주도로 전 직원 역량 강화 프로젝트 추진. 조인규 파트장 리딩 역량 강화도 동시 진행." },
+        { "num": "↑", "label": "사각지대 해소", "text": "음성공장 관리 병행 + 포장물류팀 신설로 기존 관리·운영의 빈 영역 보완." }
       ],
       "sections": [
         {
@@ -2835,21 +3412,45 @@
           ]
         },
         {
-          "title": "총무파트 흡수 → 직원 역량 강화 프로젝트",
-          "text": "공무파트 산하의 총무파트를 생산기획팀으로 이관하는 것은 단순한 행정 이관이 아닙니다. 총무파트가 가진 인사·교육·문화 기능을 활용해 직원 역량 강화 프로젝트를 본격 추진합니다.",
+          "title": "총무파트의 역할 재정의 (핵심)",
+          "text": "공무파트 산하의 총무파트(이안나 프로 1명)를 생산기획팀으로 이관하는 진짜 이유는 단순 행정 이관이 아니라, 총무파트의 역할을 전사 성과측정 체계와 인프라 관리의 중추 부서로 재정의하기 위함입니다.",
           "items": [
-            "사내 교육 시스템 정비 (AI 확산 트랙과 연계)",
-            "부서간 협업 강화 프로그램 운영 (간담회·워크숍)",
-            "신규 입사자 온보딩 체계화",
-            "성과·역량 평가 기준 정립 (Pillar 4와 연계)"
+            "AS-IS: 사무비품·구매 행정·면접 안내 등 단순 행정 지원",
+            "TO-BE 1: 전사 성과측정 체계 수립·운영 (KPI 정의 보조 / 분기 집계 / 보고서 정리)",
+            "TO-BE 2: 정보전략파트와 협업하여 공장 네트워크·전산기기 안정적 관리",
+            "TO-BE 3: 사내 교육 시스템 정비 (AI 확산 트랙과 연계)",
+            "TO-BE 4: 부서간 협업 강화 프로그램 운영 (간담회·워크숍)",
+            "TO-BE 5: 신규 입사자 온보딩 체계화",
+            "결과: 단순 행정 지원 → 전사 운영 인프라의 중추로 위상 격상"
+          ]
+        },
+        {
+          "title": "정보전략파트와의 협업 모델",
+          "text": "신설되는 정보전략파트가 시스템·데이터 측면의 기술적 운영을 담당한다면, 총무파트는 그것이 현장에서 안정적으로 작동하도록 행정·운영 측면을 책임집니다. 두 파트가 짝을 이뤄 전사 인프라를 운영합니다.",
+          "items": [
+            "정보전략파트: 네트워크 설계·시스템 운영·보안 정책 수립 (기술)",
+            "총무파트: 현장 장비 관리·자산 추적·라이센스 관리·운영 행정 (행정)",
+            "분기 합동 점검 (네트워크 상태 + 장비 노후화 + 라이센스 갱신 일정)",
+            "사고·장애 시 즉각 협력 대응 체계"
+          ]
+        },
+        {
+          "title": "단계별 인력 운영 계획",
+          "text": "총무파트는 현재 이안나 프로 1명입니다. 즉시 인력을 늘리는 것이 아니라, 성과측정 체계가 안착된 이후 사업계획 수립·관리 전담 인원 추가를 단계적으로 검토합니다.",
+          "items": [
+            "Phase 1 (2026 Q2~Q4) — 이안나 프로 1명 체제 유지. 성과측정 체계 수립·운영, AI/정보전략과 협업 모델 정착에 집중",
+            "Phase 2 (2027~) — 성과측정 체계 안착 확인 후, 사업계획 수립·관리 전담 인원 1명 추가 검토",
+            "Phase 3 (중장기) — 부서 단위 격상 시 인사·교육·인프라 행정의 통합 부서로 확장 가능성 검토",
+            "충원 시점은 업무량 데이터와 성과 지표를 근거로 결정 (감 아닌 측정 기반)"
           ]
         },
         {
           "title": "변화의 본질",
           "items": [
             "디렉터: 핵심 의사결정에 집중 (부하 분산)",
-            "생산기획팀: 책임 확장 (디렉터 백업 + 직원 역량 강화 주도)",
-            "전사: 의사결정 속도 + 역량 성장의 동시 진행"
+            "생산기획팀: 책임 확장 (디렉터 백업 + 직원 역량 강화 + 성과 관리 주도)",
+            "총무파트: 단순 행정 → 전사 운영 인프라 중추로 격상",
+            "전사: 의사결정 속도 + 역량 성장 + 측정 가능한 운영의 동시 진행"
           ]
         }
       ],
@@ -2857,8 +3458,8 @@
     }'>
       <div class="ib-content">
         <div class="ib-tag">EXPECTED IMPACT · 조직 재편이 만들어내는 변화</div>
-        <div class="ib-title">디렉터 부재 대응 + 빠른 의사결정 + <em>직원 역량 강화 주도</em></div>
-        <div class="ib-sub">단순한 단위 축소가 아닌, 생산기획팀이 디렉터 백업과 직원 역량 강화 프로젝트를 주도하는 구조 전환.</div>
+        <div class="ib-title">디렉터 부재 대응 + 빠른 의사결정 + <em>총무파트 위상 격상</em></div>
+        <div class="ib-sub">단순한 단위 축소가 아닌, 총무파트를 전사 성과측정·인프라 관리의 중추 부서로 격상시키는 구조 전환.</div>
       </div>
       <div class="ib-cta">
         <div class="ib-cta-label">CLICK</div>
@@ -2868,7 +3469,244 @@
   </div>
 </section>
 
-<!-- ═══ PILLAR 4 · PERFORMANCE ═══ -->
+<!-- ═══ PART VISION · 총무 + 정보전략 파트별 비전 ═══ -->
+<section class="alt" id="sec-part-vision">
+  <div class="section-header">
+    <div>
+      <div class="section-num">03.5 · Part Vision &amp; Roadmap</div>
+      <h2 class="section-title">파트별 <em>비전과 인력 운영 계획</em></h2>
+    </div>
+    <div class="section-caption">
+      조직 재편의 결과로 생산기획팀 산하에 들어오는 두 파트.
+      각각의 역할 확대와 단계적 인력 운영 계획을 제시합니다.
+    </div>
+  </div>
+
+  <!-- 총무파트 비전 -->
+  <div class="part-vision-block">
+    <div class="pv-header">
+      <div class="pv-id">PART 01</div>
+      <div class="pv-name">총무파트</div>
+      <div class="pv-tag">기존 행정 지원 → 전사 성과 관리·운영 중추</div>
+    </div>
+
+    <div class="pv-timeline">
+      <!-- Phase 1: 이안나 프로 -->
+      <div class="pv-phase active">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge">PHASE 01 · NOW</div>
+          <div class="pv-phase-date">2026 · Q2 ~ Q4</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">이안나 프로</div>
+            <div class="pv-person-status">현재 인원 · 1명</div>
+          </div>
+          <div class="pv-role-title">기존 업무 + 정보전략 협업</div>
+          <ul class="pv-roles">
+            <li>기존 행정 업무 (사무비품 · 구매 · 면접 안내) 안정 운영</li>
+            <li>정보전략파트와 협업하여 공장 네트워크·전산기기 관리 지원</li>
+            <li>현장 장비 자산 관리 · 라이센스 갱신 일정 관리</li>
+            <li>성과측정 체계 수립 단계 참여 · 데이터 정합성 검증</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2: 신규 채용 -->
+      <div class="pv-phase">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge next">PHASE 02 · NEXT</div>
+          <div class="pv-phase-date">2027 ~</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">신규 채용 + 1명</div>
+            <div class="pv-person-status">성과측정 체계 안착 후</div>
+          </div>
+          <div class="pv-role-title">성과측정 체계 고도화 + 사업계획 수립</div>
+          <ul class="pv-roles">
+            <li>전사 KPI 측정·집계·리뷰 전담</li>
+            <li>분기·연간 사업계획 수립 실무 담당</li>
+            <li>미달성 KPI 대책 트래킹 · 사후 효과 검증</li>
+            <li>측정 결과를 기반으로 한 사업계획 입력값 생성</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 향후 성장 비전 -->
+    <div class="pv-growth">
+      <div class="pv-growth-tag">FUTURE VISION</div>
+      <div class="pv-growth-text">
+        향후 <em>기획팀 업무 중심</em>으로 성장 예정 — 단순 행정 부서가 아닌 <em>전사 운영 인프라</em>의 중추.
+        역량 강화를 위한 교육·외부 세미나·자격 취득을 지원하여, 부서 단위 격상 시 인사·교육·인프라 행정의 통합 부서로 확장 가능.
+      </div>
+    </div>
+  </div>
+
+  <!-- 정보전략파트 비전 -->
+  <div class="part-vision-block">
+    <div class="pv-header info">
+      <div class="pv-id">PART 02</div>
+      <div class="pv-name">정보전략파트</div>
+      <div class="pv-tag">신설 · DX 시스템 운영 + 미래 인프라 설계</div>
+    </div>
+
+    <div class="pv-timeline">
+      <!-- Phase 1: 현재 채용 진행 -->
+      <div class="pv-phase active">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge">PHASE 01 · NOW</div>
+          <div class="pv-phase-date">2026 · Q2 (채용 진행)</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">1인 채용</div>
+            <div class="pv-person-status">결재 대기 · 면접 단계</div>
+          </div>
+          <div class="pv-role-title">DX 전략 개발 + 총무팀 협업 사내 전산</div>
+          <ul class="pv-roles">
+            <li>대시보드·실적입력기 등 기존 시스템 운영·고도화</li>
+            <li>8개 공정 현황판 확장 등 신규 시스템 개발</li>
+            <li>총무팀과 협업하여 사내 전산·네트워크·보안 정책 수립</li>
+            <li>정보보안 기반 마련 (권한·로깅·백업)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2: 연말/내년 1월 -->
+      <div class="pv-phase">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge next">PHASE 02 · NEXT</div>
+          <div class="pv-phase-date">2026 연말 ~ 2027 · 1월</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">신규 채용 + 1명</div>
+            <div class="pv-person-status">DX 시스템 1차 안착 후</div>
+          </div>
+          <div class="pv-role-title">정부지원사업 신청 + 스마트팩토리 고도화</div>
+          <ul class="pv-roles">
+            <li>정부지원사업 발굴·신청·관리 (스마트팩토리·DX 지원 사업)</li>
+            <li>스마트팩토리 단계별 고도화 로드맵 수립·실행</li>
+            <li>ERP/MES/WMS 연계 환경 설계</li>
+            <li>AI 기반 수요예측·설비예지보전 등 차세대 기술 도입 검토</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pv-growth">
+      <div class="pv-growth-tag">FUTURE VISION</div>
+      <div class="pv-growth-text">
+        정보전략파트는 단순 운영 부서가 아닌 <em>DX 전략의 실행 엔진</em>으로 성장합니다.
+        정부지원사업을 통한 외부 자금 확보, 스마트팩토리 단계적 고도화, 차세대 기술 도입까지
+        회사의 미래 인프라를 설계하는 핵심 부서로 자리잡습니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 포장물류팀 비전 -->
+  <div class="part-vision-block">
+    <div class="pv-header logistics">
+      <div class="pv-id">PART 03</div>
+      <div class="pv-name">포장물류팀 (신설)</div>
+      <div class="pv-tag">생산1·2팀 외 신규 팀 · 포장파트 + 물류(자재)파트 통합 운영</div>
+    </div>
+
+    <div class="pv-timeline">
+      <!-- Phase 1: 신설 구성 -->
+      <div class="pv-phase active">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge">PHASE 01 · NOW</div>
+          <div class="pv-phase-date">2026 · Q2~Q3 (신설)</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">5명 구성 · 팀장 공석</div>
+            <div class="pv-person-status">포장파트 3명 + 물류파트 2명</div>
+          </div>
+          <div class="pv-role-title">팀장 공석 · 조인규 파트장 팀장 대행 검토</div>
+          <ul class="pv-roles">
+            <li><strong>포장파트장 (팀장 대행 검토)</strong>: 조인규 (생산1팀 포장파트 → 팀장 대행 역량 검증)</li>
+            <li><strong>포장파트원</strong>: 김진혁 책임 · 유채민 프로 (기존 포장파트원)</li>
+            <li><strong>물류파트</strong>: 최원준 프로 (기존 자재파트 이관 · 업무 단절 없음)</li>
+            <li><strong>물류파트</strong>: 박정호 프로 (생산2팀 → 면담 의사 반영 + 자재 경력 1.5년 활용)</li>
+            <li>포장공정 운영 + 자재 입출고·재고 관리 통합</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2: 팀장 충원 -->
+      <div class="pv-phase">
+        <div class="pv-phase-marker">
+          <div class="pv-phase-badge next">PHASE 02 · NEXT</div>
+          <div class="pv-phase-date">6개월 시범 후 · 2026 Q4 ~</div>
+        </div>
+        <div class="pv-phase-body">
+          <div class="pv-person">
+            <div class="pv-person-name">팀장 선임 검토</div>
+            <div class="pv-person-status">두 가지 선택지 비교 후 결정</div>
+          </div>
+          <div class="pv-role-title">조인규 팀장 보임 또는 신규 팀장 외부 선임</div>
+          <ul class="pv-roles">
+            <li><strong>Option A</strong>: 조인규 파트장 팀장 보임 (대행 기간 역량 검증 결과 기반)</li>
+            <li><strong>Option B</strong>: 신규 팀장 외부 채용 또는 내부 타 부서 승진</li>
+            <li>포장·물류 KPI (처리량·불량률·납기준수·재고 정확도) 기반 평가</li>
+            <li>운영 안정 후 자재 자동 발주 시스템 도입 검토</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 박정호 프로 면담 결과 + 인력 이동 배경 -->
+    <div class="pv-growth">
+      <div class="pv-growth-tag">INTERVIEW · 박정호 프로 면담 결과</div>
+      <div class="pv-growth-text">
+        <strong style="color:var(--ink); display:block; margin-bottom:6px;">면담 배경</strong>
+        박정호 프로는 입사 시 포장공정 지원했으나 젤프레스온 개발 계획으로 생산2팀에 배정되어 전사 성형 공정 담당 후
+        현재 파츠 공정에서 근무 중. 현 업무에 답답함을 표시하여 면담을 진행함.<br><br>
+        <strong style="color:var(--ink); display:block; margin-bottom:6px;">면담 결과</strong>
+        <em>본인 보직 이동 의사 확인</em>. 면담 과정에서 <em>자재 경력 1.5년 보유 사실 확인됨</em>.
+        포장공정 희망이 있었으나, 자재 경력을 활용하는 것이 본인 커리어와 조직 모두에 더 유리하다고 판단하여
+        <em>물류파트로 이동 결정</em>.<br><br>
+        <strong style="color:var(--ink); display:block; margin-bottom:6px;">조인규 파트장 · 팀장 대행 검토</strong>
+        팀장 공석 상태로 출범하지만 <em>조인규 파트장의 팀장 대행 역할</em>을 우선 검토.
+        6개월 시범 운영을 통해 리딩 역량 검증 → 정식 팀장 보임 또는 신규 팀장 선임 결정.
+        역량 강화의 실전 기회이자, 외부 충원 비용 절감의 가능성.<br><br>
+        <strong style="color:var(--ink); display:block; margin-bottom:6px;">최원준 프로 · 자재팀 부하 해소</strong>
+        업무 단절 없이 같은 일을 새 팀에서 수행. 박정호의 자재 경력 1.5년이 합류함으로써
+        <em>기존 1인 운영의 공백·부하 리스크가 2인 체제로 해소</em>됨.
+      </div>
+    </div>
+  </div>
+
+  <!-- 통합 메시지 -->
+  <div class="pv-summary">
+    <div class="pv-summary-tag">INTEGRATED PLAN</div>
+    <div class="pv-summary-text">
+      세 파트의 채용·이동·역할 확장은 모두 <em>측정된 업무량 · 본인 의향 · 사업 성장 단계</em>에 따라 진행합니다.
+      당장의 인력 추가가 아닌, 명확한 시점·역할·검증 기준을 가진 운영 가능한 조직 설계입니다.
+    </div>
+    <div class="pv-summary-tracks">
+      <div class="pv-track">
+        <div class="pv-track-num">3</div>
+        <div class="pv-track-label">신설 · 재편 단위</div>
+        <div class="pv-track-text">총무파트 흡수 · 정보전략 신설 · 포장물류 신설</div>
+      </div>
+      <div class="pv-track">
+        <div class="pv-track-num">+2</div>
+        <div class="pv-track-label">중장기 추가 인력</div>
+        <div class="pv-track-text">총무 1명 + 정보전략 1명 (2026 연말 ~ 2027)</div>
+      </div>
+      <div class="pv-track">
+        <div class="pv-track-num">100%</div>
+        <div class="pv-track-label">측정 + 의향 기반</div>
+        <div class="pv-track-text">충원·이동은 업무량 데이터와 본인 의향 함께 고려</div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="alt" id="sec-pillar4">
   <div class="pillar-section">
     <div class="pillar-header">
@@ -2976,6 +3814,16 @@
           ]
         },
         {
+          "title": "운영 주체 · 누가 이걸 굴리는가",
+          "text": "성과측정 체계를 단순한 일회성 프로젝트가 아닌 지속 운영 가능한 체계로 만들기 위해서는 명확한 운영 주체가 필요합니다. 생산기획팀(이창민)이 큰 그림과 설계를 담당하고, 이관 흡수되는 총무파트(이안나 프로)가 실제 운영·집계·관리를 담당하는 구조입니다.",
+          "items": [
+            "생산기획팀(팀장): KPI 설계 · 가중치 정책 · 분기 리뷰 주관 · 대책 의사결정",
+            "총무파트(이안나 프로): 분기 자동 집계 · 측정 데이터 정합성 검증 · 보고서 정리 · 미달성 항목 트래킹",
+            "정보전략파트: 대시보드 KPI 모듈 운영 · 데이터 인프라 · 자동 집계 시스템 유지보수",
+            "현장 팀: KPI 입력 (단, 대시보드 자동 집계가 가능한 항목은 별도 입력 부담 없음)"
+          ]
+        },
+        {
           "title": "미흡한 부분에 대한 대책 수립 프로세스",
           "items": [
             "① 미달성 KPI 자동 식별 — 분기 자동 집계로 객관적 도출",
@@ -2986,12 +3834,22 @@
           ]
         },
         {
-          "title": "확장 방향",
+          "title": "확장 방향 · 사업계획 수립으로의 연결",
           "text": "성과 측정은 인사 평가에 머무르지 않고 사업계획 수립의 핵심 입력값으로 확장됩니다. 어떤 영역에 더 투자할지, 어떤 영역은 줄여야 할지, 어디에 신규 인력이 필요한지 모두 측정 결과가 근거 자료가 됩니다.",
           "items": [
             "예산 배분 의사결정의 객관적 근거",
             "신규 사업·신규 인력 필요성 판단",
             "조직 구조 조정의 데이터 기반 결정"
+          ]
+        },
+        {
+          "title": "총무파트 인력 확장 계획 (단계적)",
+          "text": "성과측정 체계와 사업계획 관리가 안정 궤도에 오르면, 총무파트는 현재 1명(이안나 프로) 체제에서 단계적으로 확장됩니다. 충원 시점은 업무량 데이터에 근거해 결정합니다.",
+          "items": [
+            "Phase 1 (2026 Q2~Q4) — 1명 체제 유지. 성과측정 체계 수립·운영에 집중",
+            "Phase 2 (2027~) — 성과측정 체계 안착 확인 후, 사업계획 수립·관리 전담 인원 1명 추가 검토",
+            "Phase 3 (중장기) — 부서 단위 격상 시 인사·교육·인프라 행정의 통합 부서로 확장 가능성 검토",
+            "충원은 감(感)이 아닌 측정된 업무량을 근거로 — 본 측정 체계 자체가 충원 결정의 데이터가 됨"
           ]
         }
       ],
@@ -3922,7 +4780,8 @@
 
     // 노드별 좌표 정의 (스테이지 폭/높이 기준 %)
     // AS-IS: 디렉터 아래 5개 팀이 가로로 배치 + 자재(생산관리 아래) + 총무(공무 아래)
-    // TO-BE: 5개 팀은 동일 위치, 자재는 사이드로, 총무·정보전략·음성공장은 생산기획 아래로
+    // AS-IS: 5팀 + 자재(생산관리 자식) + 총무(공무 자식)
+    // TO-BE: 6팀(+포장물류) + 자재→물류파트(포장물류 자식) + 포장파트(포장물류 자식) + 총무·정보전략·음성공장(생산기획 자식)
     const positions = {
       asis: {
         director:     { x: 50,    y: 50  },   // center top
@@ -3934,19 +4793,26 @@
         material:     { x: 32,    y: 340 },   // 생산관리 아래
         general:      { x: 78,    y: 340 },   // 공무 아래
         infostrategy: { x: 50,    y: 200 },   // 숨김
-        eumseong:     { x: 50,    y: 200 }    // 숨김
+        eumseong:     { x: 50,    y: 200 },   // 숨김
+        logistics:    { x: 50,    y: 200 },   // 숨김
+        packaging:    { x: 50,    y: 200 }    // 숨김
       },
       tobe: {
         director:     { x: 50,    y: 50  },
-        planning:     { x: 16,    y: 200 },
-        mgmt:         { x: 38,    y: 200 },
-        prod1:        { x: 54,    y: 200 },
-        prod2:        { x: 68,    y: 200 },
-        facility:     { x: 82,    y: 200 },
-        material:     { x: 88,    y: 410 },   // 사이드 분리 (사이드 버킷 영역)
-        general:      { x: 5,     y: 360 },   // 생산기획 아래 좌측
-        infostrategy: { x: 19,    y: 360 },   // 생산기획 아래 중앙
-        eumseong:     { x: 33,    y: 360 }    // 생산기획 아래 우측
+        // 6개 팀을 가로로 배치 (간격 좁게)
+        planning:     { x: 14,    y: 200 },
+        mgmt:         { x: 30,    y: 200 },
+        prod1:        { x: 44,    y: 200 },
+        prod2:        { x: 58,    y: 200 },
+        logistics:    { x: 73,    y: 200 },   // 포장물류팀 (신설, 디렉터 직속)
+        facility:     { x: 88,    y: 200 },
+        // 생산기획 아래 3개 (총무·정보전략·음성공장)
+        general:      { x: 4,     y: 380 },
+        infostrategy: { x: 17,    y: 380 },
+        eumseong:     { x: 30,    y: 380 },
+        // 포장물류 아래 2개 (포장파트·물류파트)
+        packaging:    { x: 66,    y: 380 },   // 포장물류 아래 좌측
+        material:     { x: 80,    y: 380 }    // 자재파트 → 포장물류 아래 우측 (물류파트로)
       }
     };
 
@@ -3990,18 +4856,20 @@
         { from: 'mgmt',     to: 'material' },
         { from: 'facility', to: 'general' }
       ] : [
-        // TO-BE
+        // TO-BE: 디렉터 → 6팀(포장물류 추가)
         { from: 'director', to: 'planning' },
         { from: 'director', to: 'mgmt' },
         { from: 'director', to: 'prod1' },
         { from: 'director', to: 'prod2' },
+        { from: 'director', to: 'logistics',   cls: 'new' },     // 포장물류팀 신설
         { from: 'director', to: 'facility' },
         // 생산기획 하위
         { from: 'planning', to: 'general',      cls: 'moved' },
         { from: 'planning', to: 'infostrategy', cls: 'new' },
         { from: 'planning', to: 'eumseong',     cls: 'new' },
-        // 생산관리 → 자재 (분리) - 표시 안하거나 점선으로
-        // material은 사이드 버킷으로 가므로 따로 그리지 않음
+        // 포장물류 하위
+        { from: 'logistics', to: 'packaging',   cls: 'new' },    // 포장파트 신설
+        { from: 'logistics', to: 'material',    cls: 'moved' }   // 자재파트 이관 → 물류파트
       ];
 
       edges.forEach(e => {
@@ -4110,6 +4978,169 @@
     }, { threshold: 0.4 });
     orgIO.observe(orgStage);
   }
+
+  // ─────────────────────────────────────────────
+  // 8. Presentation Mode
+  // ─────────────────────────────────────────────
+  const presToggle = document.getElementById('presToggle');
+  const presIndicator = document.getElementById('presIndicator');
+  const presHelp = document.getElementById('presHelp');
+  const pipCurrent = document.getElementById('pipCurrent');
+  const pipTotal = document.getElementById('pipTotal');
+  const piSection = document.getElementById('piSection');
+
+  // 발표 모드 섹션 순서 정의 (Hero 포함)
+  const presSections = [
+    { id: 'hero',                 label: '표지' },
+    { id: 'sec-summary',          label: '요약' },
+    { id: 'sec-phasing',          label: '단계 전략' },
+    { id: 'sec-status',           label: '현재 상태' },
+    { id: 'sec-pillar1',          label: 'P1 · DX 시스템' },
+    { id: 'sec-pillar2',          label: 'P2 · AI 확산' },
+    { id: 'sec-pillar3',          label: 'P3 · 조직 재편' },
+    { id: 'sec-part-vision',      label: 'P3.5 · 파트 비전' },
+    { id: 'sec-pillar4',          label: 'P4 · 성과 체계' },
+    { id: 'sec-pillar5',          label: 'P5 · 권한 위임' },
+    { id: 'sec-outcomes',         label: '06 · 다섯 축의 결과' },
+    { id: 'sec-roadmap',          label: '07 · 통합 로드맵' },
+    { id: 'sec-risk',             label: '08 · 리스크' },
+    { id: 'sec-budget-rationale', label: '09 · 특별 예산 요청' },
+    { id: 'sec-budget-impact',    label: '10 · 예산 효과' },
+    { id: 'sec-closing',          label: '★ 마무리' }
+  ].map(s => ({ ...s, el: document.getElementById(s.id) })).filter(s => s.el);
+
+  pipTotal.textContent = String(presSections.length).padStart(2, '0');
+
+  let presMode = false;
+  let currentIdx = 0;
+
+  function getCurrentSectionIdx() {
+    let activeIdx = 0;
+    presSections.forEach((s, i) => {
+      const r = s.el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.4) activeIdx = i;
+    });
+    return activeIdx;
+  }
+
+  function updatePresIndicator() {
+    if (!presMode) return;
+    currentIdx = getCurrentSectionIdx();
+    pipCurrent.textContent = String(currentIdx + 1).padStart(2, '0');
+    piSection.textContent = presSections[currentIdx].label;
+  }
+
+  function goToSection(idx) {
+    if (idx < 0) idx = 0;
+    if (idx >= presSections.length) idx = presSections.length - 1;
+    presSections[idx].el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    currentIdx = idx;
+    setTimeout(updatePresIndicator, 100);
+  }
+
+  function setPresentationMode(on) {
+    presMode = on;
+    document.body.classList.toggle('presentation-mode', on);
+    presToggle.querySelector('.pt-label').textContent = on ? '발표 모드 종료' : '발표 모드';
+    presToggle.querySelector('.pt-icon').textContent = on ? '■' : '▶';
+    if (on) updatePresIndicator();
+  }
+
+  presToggle.addEventListener('click', () => setPresentationMode(!presMode));
+
+  // 스크롤 시 인디케이터 업데이트
+  window.addEventListener('scroll', () => {
+    if (presMode) updatePresIndicator();
+  }, { passive: true });
+
+  // 도움말 토글
+  function toggleHelp(force) {
+    const willOpen = force !== undefined ? force : !presHelp.classList.contains('open');
+    presHelp.classList.toggle('open', willOpen);
+  }
+  presHelp.addEventListener('click', e => {
+    if (e.target === presHelp) toggleHelp(false);
+  });
+
+  // 키보드 단축키
+  document.addEventListener('keydown', e => {
+    // 모달이 열려 있으면 일부 단축키만 처리
+    const modalOpen = modalOverlay.classList.contains('open');
+    const helpOpen = presHelp.classList.contains('open');
+
+    // ESC: 모달/도움말 닫기 우선, 그 다음 발표 모드 종료
+    if (e.key === 'Escape') {
+      if (helpOpen) { e.preventDefault(); toggleHelp(false); return; }
+      if (modalOpen) { return; /* 기존 모달 ESC 처리 사용 */ }
+      if (presMode) { e.preventDefault(); setPresentationMode(false); return; }
+    }
+
+    // 입력 필드 안에 있으면 무시
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable) return;
+
+    // 모달이 열려 있으면 키 단축키 비활성
+    if (modalOpen || helpOpen && e.key !== 'h' && e.key !== 'H' && e.key !== '?') {
+      if (helpOpen && (e.key === 'h' || e.key === 'H' || e.key === '?')) {
+        e.preventDefault(); toggleHelp(false);
+      }
+      return;
+    }
+
+    // P 키: 발표 모드 토글 (어디서나 작동)
+    if (e.key === 'p' || e.key === 'P') {
+      e.preventDefault();
+      setPresentationMode(!presMode);
+      return;
+    }
+
+    // H, ? 키: 도움말
+    if (e.key === 'h' || e.key === 'H' || e.key === '?') {
+      e.preventDefault();
+      toggleHelp();
+      return;
+    }
+
+    // F: 전체화면
+    if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+      return;
+    }
+
+    // 다음 단축키들은 발표 모드에서만 적용
+    if (!presMode) return;
+
+    const idx = getCurrentSectionIdx();
+
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goToSection(idx + 1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goToSection(idx - 1);
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      goToSection(e.shiftKey ? idx - 1 : idx + 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goToSection(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goToSection(presSections.length - 1);
+    } else if (/^[0-9]$/.test(e.key)) {
+      // 0~9 직접 점프 - presSections 인덱스 매핑
+      // 0=Hero, 1=Summary, 2=Phasing, 3=Status, 4=P1, 5=P2, 6=P3, 7=P4, 8=P5, 9=Outcomes
+      // 그 이후 섹션은 단축키 없음 (← → 또는 직접 스크롤)
+      e.preventDefault();
+      const targetIdx = parseInt(e.key, 10);
+      if (targetIdx < presSections.length) goToSection(targetIdx);
+    }
+  });
 
 })();
 </script>
